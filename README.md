@@ -1,1 +1,1 @@
-# third-party-api-integration
+# Third party API integration
