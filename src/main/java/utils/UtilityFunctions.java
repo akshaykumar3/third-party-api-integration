@@ -10,15 +10,15 @@ public class UtilityFunctions {
 
     private static final Logger logger = LogFactory.getLogger(UtilityFunctions.class);
 
-    private static boolean isNullOrEmpty(String input) {
+    public static boolean isNullOrEmpty(String input) {
         return null == input || input.isEmpty();
     }
 
-    static boolean isPresent(String input) {
+    public static boolean isPresent(String input) {
         return !isNullOrEmpty(input);
     }
 
-    static void sendFailure(HttpServerResponse httpServerResponse, String reason, int statusCode) {
+    public static void sendFailure(HttpServerResponse httpServerResponse, String reason, int statusCode) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.put("status", "FAILURE");
         jsonObject.put("reason", reason);
@@ -27,7 +27,7 @@ public class UtilityFunctions {
         httpServerResponse.end(jsonObject.toString());
     }
 
-    static void sendSuccess(HttpServerResponse httpServerResponse, JsonObject response) {
+    public static void sendSuccess(HttpServerResponse httpServerResponse, JsonObject response) {
         response.put("status", "SUCCESS");
         httpServerResponse.putHeader("content-type", "application/json");
         httpServerResponse.setStatusCode(HttpResponseStatus.OK.code());

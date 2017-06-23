@@ -1,4 +1,4 @@
-package utils;
+package controllers;
 
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.json.Json;
@@ -8,6 +8,8 @@ import io.vertx.rxjava.ext.web.RoutingContext;
 import models.S3DownloadRequest;
 import models.S3UploadRequest;
 import services.S3Services;
+import utils.LogFactory;
+import utils.UtilityFunctions;
 
 // Controller to route all S3 related requests
 public class S3Controller {
@@ -29,7 +31,7 @@ public class S3Controller {
                     UtilityFunctions.sendSuccess(context.response(), apiResponse);
                 }, error -> {
                     logger.error("Error while uploading with request = " + s3UploadRequest.toString(), error);
-                    UtilityFunctions.sendFailure(context.response(), "Invalid Request", HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
+                    UtilityFunctions.sendFailure(context.response(), "Error while uploading", HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
                 });
     }
 
@@ -41,7 +43,7 @@ public class S3Controller {
         String cloudFolderName = context.request().params().get("cloud_folder_name");
         S3DownloadRequest downloadRequest = new S3DownloadRequest(fileName, locationToSave, bucketName, cloudFolderName);
         if (!validateS3DownloadRequest(downloadRequest)) {
-            UtilityFunctions.sendFailure(context.response(), "Invalid Request", HttpResponseStatus.BAD_REQUEST.code());
+            UtilityFunctions.sendFailure(context.response(), "Error while downloading", HttpResponseStatus.BAD_REQUEST.code());
             return;
         }
 
