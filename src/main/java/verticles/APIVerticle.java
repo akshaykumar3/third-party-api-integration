@@ -1,5 +1,6 @@
 package verticles;
 
+import controllers.GoogleMapsController;
 import io.vertx.core.Future;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.json.JsonObject;
@@ -9,7 +10,7 @@ import io.vertx.rxjava.core.http.HttpServer;
 import io.vertx.rxjava.ext.web.Router;
 import io.vertx.rxjava.ext.web.handler.BodyHandler;
 import utils.LogFactory;
-import utils.S3Controller;
+import controllers.S3Controller;
 
 // This Verticle is to be used to receive API calls.
 public class APIVerticle extends AbstractVerticle {
@@ -27,10 +28,13 @@ public class APIVerticle extends AbstractVerticle {
         router.put().handler(BodyHandler.create());
 
         // Log all the API calls with request body and query params.
-//        logRequest(router);
+        logRequest(router);
 
         router.get("/api/v1/s3/download").handler(S3Controller::download);
         router.post("/api/v1/s3/upload").handler(S3Controller::upload);
+
+        router.get("/api/v1/google/maps/geocode").handler(GoogleMapsController::geocode);
+        router.get("/api/v1/google/maps/place").handler(GoogleMapsController::place);
     }
 
     @Override
@@ -69,6 +73,7 @@ public class APIVerticle extends AbstractVerticle {
             if (routingContext.request() != null && routingContext.request().query() != null) {
                 logger.info("Request query are " + routingContext.request().query());
             }
+            routingContext.next();
         });
     }
 }
