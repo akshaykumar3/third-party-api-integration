@@ -39,9 +39,8 @@ public class S3Controller {
         // Validate Request
         String fileName = context.request().params().get("file_name");
         String locationToSave = context.request().params().get("location_to_save");
-        String bucketName = context.request().params().get("bucket_name");
         String cloudFolderName = context.request().params().get("cloud_folder_name");
-        S3DownloadRequest downloadRequest = new S3DownloadRequest(fileName, locationToSave, bucketName, cloudFolderName);
+        S3DownloadRequest downloadRequest = new S3DownloadRequest(fileName, locationToSave, cloudFolderName);
         if (!validateS3DownloadRequest(downloadRequest)) {
             UtilityFunctions.sendFailure(context.response(), "Error while downloading", HttpResponseStatus.BAD_REQUEST.code());
             return;
@@ -59,15 +58,13 @@ public class S3Controller {
     }
 
     private static boolean validateS3DownloadRequest(S3DownloadRequest downloadRequest) {
-        return UtilityFunctions.isPresent(downloadRequest.getBucketName()) &&
-                UtilityFunctions.isPresent(downloadRequest.getCloudFolderName()) &&
+        return UtilityFunctions.isPresent(downloadRequest.getCloudFolderName()) &&
                 UtilityFunctions.isPresent(downloadRequest.getFileName()) &&
                 UtilityFunctions.isPresent(downloadRequest.getLocationToSave());
     }
 
     private static boolean validateS3Upload(S3UploadRequest s3UploadRequest) {
-        return UtilityFunctions.isPresent(s3UploadRequest.getBucketName()) &&
-                UtilityFunctions.isPresent(s3UploadRequest.getCloudFolderName()) &&
+        return UtilityFunctions.isPresent(s3UploadRequest.getCloudFolderName()) &&
                 UtilityFunctions.isPresent(s3UploadRequest.getFileName()) &&
                 UtilityFunctions.isPresent(s3UploadRequest.getFilePath());
     }

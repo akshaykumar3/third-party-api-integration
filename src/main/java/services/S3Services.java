@@ -25,6 +25,7 @@ public class S3Services {
     private static final Logger logger = LogFactory.getLogger(S3Services.class);
     private static final String AWS_ACCESS_KEY = APIVerticle.config.getString("aws_access_key", "");
     private static final String AWS_SECRET_KEY = APIVerticle.config.getString("aws_secret_key", "");
+    private static final String S3_BUCKET_NAME = APIVerticle.config.getString("aws_bucket_name", "");
 
     private static final AWSCredentials credentials = new BasicAWSCredentials(AWS_ACCESS_KEY, AWS_SECRET_KEY);
     private static final TransferManager transferManager = new TransferManager(credentials);
@@ -32,7 +33,7 @@ public class S3Services {
 
     public static Observable<String> upload(S3UploadRequest s3Request) {
         String cloudName = s3Request.getCloudFolderName() + "/" + s3Request.getFileName();
-        PutObjectRequest request = new PutObjectRequest(s3Request.getBucketName(), cloudName, new File(s3Request.getFilePath()))
+        PutObjectRequest request = new PutObjectRequest(S3_BUCKET_NAME, cloudName, new File(s3Request.getFilePath()))
                 .withCannedAcl(CannedAccessControlList.PublicRead);
 
         logger.info("Upload started to location - "+cloudName);
@@ -52,7 +53,7 @@ public class S3Services {
                         logger.info("Part Failed");
                         break;
                     case TRANSFER_COMPLETED_EVENT:
-                        String contentUrl = "https://s3-ap-southeast-1.amazonaws.com/" + s3Request.getBucketName() + "/" + cloudName;
+                        String contentUrl = "https://s3-ap-southeast-1.amazonaws.com/" + S3_BUCKET_NAME + "/" + cloudName;
                         subscriber.onNext(contentUrl);
                         subscriber.onCompleted();
                         break;
@@ -75,7 +76,7 @@ public class S3Services {
 
     public static Observable<String> download(S3DownloadRequest request) {
         String relativeUrl = request.getCloudFolderName() + "/" + request.getFileName();
-        GetObjectRequest getObjectRequest = new GetObjectRequest(request.getBucketName(), relativeUrl);
+        GetObjectRequest getObjectRequest = new GetObjectRequest(S3_BUCKET_NAME, relativeUrl);
 
         return Observable.create(subscriber -> {
             ProgressListener progressListener = progressEvent -> {

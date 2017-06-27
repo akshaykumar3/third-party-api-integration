@@ -14,8 +14,6 @@ public class S3UploadRequest {
     private String fileName;
     @JsonProperty("file_path")
     private String filePath;
-    @JsonProperty("bucket_name")
-    private String bucketName;
     @JsonProperty("cloud_folder_name")
     private String cloudFolderName;
 }
