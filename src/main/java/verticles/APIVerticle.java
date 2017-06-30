@@ -1,6 +1,7 @@
 package verticles;
 
 import controllers.GoogleMapsController;
+import controllers.TwitterController;
 import io.vertx.core.Future;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.json.JsonObject;
@@ -35,6 +36,8 @@ public class APIVerticle extends AbstractVerticle {
 
         router.get("/api/v1/google/maps/geocode").handler(GoogleMapsController::geocode);
         router.get("/api/v1/google/maps/place").handler(GoogleMapsController::place);
+
+        router.get("/api/v1/twitter/search/tweets").handler(TwitterController::searchTweets);
     }
 
     @Override

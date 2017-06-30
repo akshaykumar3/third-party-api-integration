@@ -2,5 +2,8 @@
   "port" : 8080,
   "aws_access_key" : "aws_access_key",
   "aws_secret_key" : "aws_secret_key",
-  "aws_bucket_name" : "aws_bucket_name"
+  "aws_bucket_name" : "aws_bucket_name",
+
+  "twitter_consumer_key" : "twitter_consumer_key",
+  "twitter_consumer_secret" : "twitter_consumer_secret"
 }
