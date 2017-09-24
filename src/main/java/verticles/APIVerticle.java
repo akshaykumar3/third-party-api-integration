@@ -1,6 +1,7 @@
 package verticles;
 
 import controllers.GoogleMapsController;
+import controllers.HealthCheckController;
 import controllers.TwitterController;
 import io.vertx.core.Future;
 import io.vertx.core.http.HttpServerOptions;
@@ -30,6 +31,8 @@ public class APIVerticle extends AbstractVerticle {
 
         // Log all the API calls with request body and query params.
         logRequest(router);
+
+        router.get("/health_check").handler(HealthCheckController::healthCheck);
 
         router.get("/api/v1/s3/download").handler(S3Controller::download);
         router.post("/api/v1/s3/upload").handler(S3Controller::upload);
